@@ -44,7 +44,7 @@ void pushKeystroke(String pushMessage) {
 
 void checkInput(String s) {
     if (s.equals("setDelay")) {
-        Serial.print("setDelay");
+        Serial.print("\nsetDelay");
         while(!Serial.available()){Serial.print(".");delay(3000);}
         String input = Serial.readStringUntil('\n');
         input = input.substring(0,input.length());
