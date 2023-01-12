@@ -12,6 +12,7 @@ void setup() {
 
 void loop() {
     String s= getUserSerialInput();
+    checkInput(s);
     delay(pushDelay);
     pushKeystroke(s); 
 }
@@ -27,7 +28,6 @@ String getUserSerialInput() {
 }
 
 void pushKeystroke(String pushMessage) {
-    Serial.print("  to:\tBLE Keyboard");
     while(!bleKeyboard.isConnected()) {Serial.print(".");delay(1000);}
     int str_len = pushMessage.length(); 
     for (int i= 0; i < str_len; i++) {
