@@ -2,7 +2,7 @@
 #include <string.h>
 
 BleKeyboard bleKeyboard;
-int pushDelay= 2000; // between serial in & ble out
+int pushDelay= 2000; // zwischen eingabe & ausgabe
 
 void setup() {
   Serial.begin(115200);
@@ -11,38 +11,41 @@ void setup() {
 }
 
 void loop() {
+    int n= pushDelay;
     String s= getUserSerialInput();
     checkInput(s);
-    delay(pushDelay);
-    pushKeystroke(s); 
+    if (pushDelay== n) { // wird übersprungen 
+        delay(pushDelay); // wenn Delay neu
+        pushKeystroke(s); // gesetzt wurde
+    }
 }
 
 String getUserSerialInput() {
     String input;
     Serial.print("\nPaste Keystroke to push over");
-    while(!Serial.available()){Serial.print(".");delay(1000);}
+    while(!Serial.available()){Serial.print(".");delay(3000);}
     input = Serial.readStringUntil('\n');
     input = input.substring(0,input.length());
-    Serial.println("\npush:\t" + input);
     return input;
 }
 
 void pushKeystroke(String pushMessage) {
-    while(!bleKeyboard.isConnected()) {Serial.print(".");delay(1000);}
+    Serial.println("\npush:\t" + pushMessage);
+    while(!bleKeyboard.isConnected()) {Serial.print(".");delay(3000);}
     int str_len = pushMessage.length(); 
     for (int i= 0; i < str_len; i++) {
         bleKeyboard.write(pushMessage[i]);
-        Serial.println((char) pushMessage[i]);
+        Serial.print((char) pushMessage[i]);
         delay(50);
     }
-    Serial.println("\nKEYSTROKE EXECUTED");
+    Serial.println("\nKEYSTROKE EXECUTED\n");
     return;
 }
 
 void checkInput(String s) {
     if (s.equals("setDelay")) {
         Serial.print("setDelay");
-        while(!Serial.available()){Serial.print(".");delay(1000);}
+        while(!Serial.available()){Serial.print(".");delay(3000);}
         String input = Serial.readStringUntil('\n');
         input = input.substring(0,input.length());
         pushDelay= input.toInt();
