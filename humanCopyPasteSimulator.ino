@@ -2,7 +2,7 @@
 #include <string.h>
 
 BleKeyboard bleKeyboard;
-int pushDelay= 2000;
+int pushDelay= 2000; // between serial in & ble out
 
 void setup() {
   Serial.begin(115200);
