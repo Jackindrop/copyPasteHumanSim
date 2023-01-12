@@ -7,7 +7,6 @@ int pushDelay= 2000; // zwischen eingabe & ausgabe
 void setup() {
   Serial.begin(115200);
   bleKeyboard.begin();
-  Serial.print("\tGib Ihm\n");
 }
 
 void loop() {
@@ -22,7 +21,6 @@ void loop() {
 
 String getUserSerialInput() {
     String input;
-    Serial.print("\nPaste Keystroke to push over");
     while(!Serial.available()){Serial.print(".");delay(3000);}
     input = Serial.readStringUntil('\n');
     input = input.substring(0,input.length());
@@ -33,6 +31,7 @@ void pushKeystroke(String pushMessage) {
     Serial.println("\npush:\t" + pushMessage);
     while(!bleKeyboard.isConnected()) {Serial.print(".");delay(3000);}
     int str_len = pushMessage.length(); 
+    Serial.print("\n     \t");
     for (int i= 0; i < str_len; i++) {
         bleKeyboard.write(pushMessage[i]);
         Serial.print((char) pushMessage[i]);
