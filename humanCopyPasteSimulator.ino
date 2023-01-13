@@ -12,6 +12,7 @@ void setup() {
 void loop() {
     int n= pushDelay;
     String s= getUserSerialInput();
+    Serial.println(s);
     checkInput(s);
     if (pushDelay== n) { // wird übersprungen 
         delay(pushDelay); // wenn Delay neu
@@ -30,11 +31,21 @@ String getUserSerialInput() {
 void pushKeystroke(String pushMessage) {
     Serial.println("\npush:\t" + pushMessage);
     while(!bleKeyboard.isConnected()) {Serial.print(".");delay(3000);}
-    int str_len = pushMessage.length(); 
     Serial.print("\n     \t");
-    for (int i= 0; i < str_len; i++) {
+    for (int i= 0; i< pushMessage.length(); i++) { // z & y char swap
+        if ((char) pushMessage[i] == 'y') {
+            pushMessage[i]= 'z';
+        } else if ((char) pushMessage[i] == 'Y') {
+            pushMessage[i]= 'Z';
+        } else if ((char) pushMessage[i] == 'z') {
+            pushMessage[i]= 'y';
+        } else if ((char) pushMessage[i] == 'Z') {
+            pushMessage[i]= 'Y';
+        }
+    }
+    for (int i= 0; i < pushMessage.length(); i++) { // schleife pusht ein char nach dem anderen
         bleKeyboard.write(pushMessage[i]);
-        Serial.print((char) pushMessage[i]);
+        Serial.print(pushMessage[i]);
         delay(50);
     }
     Serial.println("\nKEYSTROKE EXECUTED\n");
