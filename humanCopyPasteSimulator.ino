@@ -2,7 +2,7 @@
 #include <string.h>
 
 BleKeyboard bleKeyboard("HumanTrashSim", "419", 100);
-int pushDelay= 2000, typeDelayy= 50;
+int pushDelay= 1500, typeDelayy= 20;
 String data;
 bool changeParameters= false;
 
