@@ -1,7 +1,7 @@
 #include <BleKeyboard.h>
 #include <string.h>
 
-BleKeyboard bleKeyboard("HumanTrashSim", "419", 100);
+BleKeyboard bleKeyboard;
 int pushDelay= 1500, typeDelayy= 20;
 String data, dummy;
 bool changeParameters= false;
@@ -16,14 +16,29 @@ void setup() {
 void loop() {
     checkBluetoothConnection();
     data= getUserSerialInput();
-    charSwap(); 
-    delay(pushDelay); 
-    for (int i= 0; i < data.length(); i++) {
-        bleKeyboard.write(data[i]);
-        delay(typeDelayy);
-    }
+    lookForNewParametersAndPushData();
     data= "";
     Serial.print("\nready for next execute");
+}
+
+void lookForNewParametersAndPushData() {
+    // looking for new Parameters to set
+    if (data.equals("man")) {
+        Serial.print("\ncmds= {\n\tsetPushDelay,\n\tsetTypeDelay\n}\n");
+        return;
+    } else if (data.equals("setPushDelay")) {
+        pushDelay= getInteger();
+        return;
+    } else if (data.equals("setTypeDelay")) {
+        typeDelayy= getInteger();
+        return;
+    }
+    // make swap & push with bluetooth keyboard object
+    charSwap(); 
+    delay(pushDelay);
+    for (int i= 0; i < data.length(); i++) {
+        bleKeyboard.write(data[i]);delay(typeDelayy);
+    } 
 }
 
 String getUserSerialInput() {
@@ -52,7 +67,6 @@ void checkBluetoothConnection() {
     }
 }
 
-/*
 int getInteger() {  
     while(Serial.available()>0) {
       int inChar=Serial.read();
@@ -65,4 +79,3 @@ int getInteger() {
       }
     }
 }
-*/
