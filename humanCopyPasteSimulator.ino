@@ -3,29 +3,26 @@
 
 BleKeyboard bleKeyboard("HumanTrashSim", "419", 100);
 int pushDelay= 1500, typeDelayy= 20;
-String data;
+String data, dummy;
 bool changeParameters= false;
 
 void setup() {
     Serial.begin(115200);
     while(!Serial);
     bleKeyboard.begin();
+    delay(200);
 }
 
 void loop() {
     checkBluetoothConnection();
     data= getUserSerialInput();
-    // Entwerfe Methode zum modifizieren der 
-    // Parameter zur Laufzeit
-    if (!changeParameters) { 
-        delay(pushDelay); 
-        charSwap(); 
-        for (int i= 0; i < data.length(); i++) {
-            bleKeyboard.write(data[i]);
-            delay(typeDelayy);
-        }
-        data= "";
+    charSwap(); 
+    delay(pushDelay); 
+    for (int i= 0; i < data.length(); i++) {
+        bleKeyboard.write(data[i]);
+        delay(typeDelayy);
     }
+    data= "";
     Serial.print("\nready for next execute");
 }
 
@@ -54,3 +51,18 @@ void checkBluetoothConnection() {
         Serial.print(".");delay(3000);
     }
 }
+
+/*
+int getInteger() {  
+    while(Serial.available()>0) {
+      int inChar=Serial.read();
+      if(isDigit(inChar))dummy+=(char)inChar;
+      if(inChar=='\n') {
+        int stringToInteger= dummy.toInt();
+        Serial.println(stringToInteger);
+        dummy="";
+        return stringToInteger;
+      }
+    }
+}
+*/
